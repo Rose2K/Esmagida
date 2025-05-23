@@ -1,0 +1,505 @@
+@model IEnumerable<EsmaGida.Models.Product>
+@{
+	ViewData["Title"] = "Ürünler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .shop-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .page-title-container {
+        background: #0d6efd;
+        color: white;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+        background-image: linear-gradient(45deg, #0d6efd, #0b5ed7);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-title-container h1 {
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 2.2rem;
+    }
+    
+    .page-title-container .subtitle {
+        opacity: 0.8;
+        font-size: 1.1rem;
+    }
+    
+    .product-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: none;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .product-image {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+    }
+    
+    .product-overlay {
+        position: absolute;
+        bottom: -60px;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .product-card:hover .product-overlay {
+        bottom: 0;
+    }
+    
+    .product-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-cart {
+        background-color: #198754;
+    }
+    
+    .btn-view {
+        background-color: #0d6efd;
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    
+    .product-content {
+        padding: 15px;
+    }
+    
+    .product-title {
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 2.8rem;
+    }
+    
+    .product-title a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .product-price {
+        font-weight: 700;
+        color: #dc3545;
+        font-size: 1.2rem;
+    }
+    
+    .product-rating {
+        color: #ffc107;
+        margin-top: 5px;
+    }
+    
+    .sidebar {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .widget {
+        margin-bottom: 25px;
+    }
+    
+    .widget h4 {
+        color: #333;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #0d6efd;
+        margin-bottom: 15px;
+    }
+    
+    .custom-filter, .shop-sorting {
+        list-style: none;
+        padding-left: 10px;
+    }
+    
+    .custom-filter li, .shop-sorting li {
+        margin-bottom: 12px;
+    }
+    
+    .custom-filter a, .shop-sorting a {
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        display: block;
+        padding: 5px;
+    }
+    
+    .custom-filter a:hover, .shop-sorting a:hover {
+        color: #0d6efd;
+        transform: translateX(5px);
+    }
+    
+    .active-filter a {
+        color: #0d6efd;
+        font-weight: 600;
+        background-color: rgba(13, 110, 253, 0.1);
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+    
+    @@media (max-width: 768px) {
+        .sidebar {
+            margin-bottom: 30px;
+        }
+        
+        .page-title-container {
+            padding: 20px;
+        }
+        
+        .page-title-container h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<!-- Page Title -->
+<div class="page-title-container">
+    <div class="container">
+        <h1>Ürünlerimiz</h1>
+        <p class="subtitle">Kaliteli unlu mamüllerimize göz atın</p>
+        
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("indexx", "Home")" class="text-white">Ana Sayfa</a></li>
+                <li class="breadcrumb-item active text-white-50" aria-current="page">Ürünler</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Shop Content -->
+<div class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <div class="widget">
+                    <h4>Kategoriler</h4>
+                    <ul class="custom-filter" data-container="#shop" data-active-class="active-filter">
+                        <li class="widget-filter-reset active-filter"><a href="#" data-filter="*">Tümü</a></li>
+                        <li><a href="#" data-filter=".sf-dress">Un</a></li>
+                        <li><a href="#" data-filter=".sf-tshirts">Yemeklik</a></li>
+                        <li><a href="#" data-filter=".sf-pants">Ekmeklik</a></li>
+                    </ul>
+                </div>
+
+                <div class="widget">
+                    <h4>Sırala</h4>
+                    <ul class="shop-sorting">
+                        <li class="widget-filter-reset active-filter"><a href="#" data-sort-by="original-order">Varsayılan</a></li>
+                        <li><a href="#" data-sort-by="name">İsim</a></li>
+                        <li><a href="#" data-sort-by="price_lh">Fiyat: Düşükten Yükseğe</a></li>
+                        <li><a href="#" data-sort-by="price_hl">Fiyat: Yüksekten Düşüğe</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="col-lg-9">
+            <div id="shop" class="row" data-layout="fitRows">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var product in Model)
+                    {
+                        <div class="col-md-4 col-sm-6 mb-4 sf-dress">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    @if (!string.IsNullOrEmpty(product.image_url))
+                                    {
+                                        <img src="@product.image_url" alt="@product.name">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/shop/brand.jpg" alt="@product.name">
+                                    }
+
+                                    @if (product.stock_quantity <= 0)
+                                    {
+                                        <div class="product-badge badge bg-secondary">Stokta Yok</div>
+                                    }
+                                    else if (product.price < 100)
+                                    {
+                                        <div class="product-badge badge bg-danger">İNDİRİM!</div>
+                                    }
+
+                                    <div class="product-overlay">
+                                        @if (product.stock_quantity > 0)
+                                        {
+                                            <a href="#" class="product-action-btn btn-cart add-to-cart-btn" data-product-id="@product.id" title="Sepete Ekle">
+                                                <i class="bi-bag-plus"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" class="product-action-btn btn-cart" style="background-color: #6c757d; cursor: not-allowed;" title="Stokta Yok">
+                                                <i class="bi-x-circle"></i>
+                                            </a>
+                                        }
+                                        <a href="@Url.Action("ProductDetail", "Home", new { id = product.id })" class="product-action-btn btn-view" title="Ürün Detayı">
+                                            <i class="bi-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-content">
+                                    <h5 class="product-title">
+                                        <a href="@Url.Action("ProductDetail", "Home", new { id = product.id })">@product.name</a>
+                                    </h5>
+                                    <div class="product-price">
+                                        @product.price.ToString("C", new System.Globalization.CultureInfo("tr-TR"))
+                                    </div>
+                                    <div class="product-rating">
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-half"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-info">
+                            <h3>Henüz ürün eklenmemiş</h3>
+                            <p>Lütfen daha sonra tekrar kontrol edin.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+	<script>
+		jQuery(window).on('load', function () {
+			jQuery('#shop').isotope({
+				transitionDuration: '0.65s',
+				getSortData: {
+					name: '.product-title',
+					price_lh: function (itemElem) {
+						if (jQuery(itemElem).find('.product-price').find('ins').length > 0) {
+							var price = jQuery(itemElem).find('.product-price ins').text();
+						} else {
+							var price = jQuery(itemElem).find('.product-price').text();
+						}
+
+						priceNum = price.split("₺");
+
+						return parseFloat(priceNum[1]);
+					},
+					price_hl: function (itemElem) {
+						if (jQuery(itemElem).find('.product-price').find('ins').length > 0) {
+							var price = jQuery(itemElem).find('.product-price ins').text();
+						} else {
+							var price = jQuery(itemElem).find('.product-price').text();
+						}
+
+						priceNum = price.split("₺");
+
+						return parseFloat(priceNum[1]);
+					}
+				},
+				sortAscending: {
+					name: true,
+					price_lh: true,
+					price_hl: false
+				}
+			});
+
+			jQuery('.custom-filter:not(.no-count)').children('li:not(.widget-filter-reset)').each(function () {
+				var element = jQuery(this),
+					elementFilter = element.children('a').attr('data-filter'),
+					elementFilterContainer = element.parents('.custom-filter').attr('data-container');
+
+				elementFilterCount = Number(jQuery(elementFilterContainer).find(elementFilter).length);
+
+				element.append('<span>' + elementFilterCount + '</span>');
+			});
+
+			jQuery('.shop-sorting li').click(function () {
+				jQuery('.shop-sorting').find('li').removeClass('active-filter');
+				jQuery(this).addClass('active-filter');
+				var sortByValue = jQuery(this).find('a').attr('data-sort-by');
+				jQuery('#shop').isotope({ sortBy: sortByValue });
+				return false;
+			});
+			
+			jQuery('.custom-filter li').click(function () {
+				jQuery('.custom-filter').find('li').removeClass('active-filter');
+				jQuery(this).addClass('active-filter');
+				var filterValue = jQuery(this).find('a').attr('data-filter');
+				jQuery('#shop').isotope({ filter: filterValue });
+				return false;
+			});
+			
+			// Sepete ekleme işlevi
+			jQuery('.add-to-cart-btn').click(function(e) {
+				e.preventDefault();
+				
+				var $btn = jQuery(this);
+				var productId = $btn.data('product-id');
+				
+				// Butonu devre dışı bırak ve animasyon ekle
+				$btn.prop('disabled', true);
+				var originalHtml = $btn.html();
+				$btn.html('<i class="bi-hourglass-split"></i>');
+				
+				// AJAX ile sepete ekle
+				jQuery.ajax({
+					url: '@Url.Action("AddToCart", "Cart")',
+					type: 'POST',
+					data: {
+						productId: productId,
+						quantity: 1 // Shop sayfasından hep 1 adet ekliyoruz
+					},
+					success: function(response) {
+						if (response.success) {
+							// Show success message
+							showSuccessNotification('Ürün sepete eklendi!');
+							
+							// Update cart item count
+							updateCartItemCount(response.itemCount);
+						} else if (response.requireLogin) {
+							// Kullanıcının giriş yapması gerekiyor
+							showErrorNotification('Bu işlemi gerçekleştirmek için giriş yapmalısınız.');
+							
+							// 2 saniye sonra login sayfasına yönlendir
+							setTimeout(function() {
+								window.location.href = '@Url.Action("Login", "Home")';
+							}, 2000);
+						} else if (response.message) {
+							// Hata mesajını göster
+							var errorMessage = response.message;
+							
+							// İç hata mesajını ekle
+							if (response.detail) {
+								errorMessage += '<hr><div class="text-start"><strong>Detay:</strong><br>' + response.detail + '</div>';
+							}
+							
+							// Hatanın stack trace bilgisini ekle
+							if (response.stackTrace) {
+								console.error('Hata stack trace:', response.stackTrace);
+							}
+							
+							// Tüm hata nesnesini konsola yazdır (inceleme için)
+							console.error('Sepete ekleme hatası:', response);
+							
+							showErrorNotification(errorMessage);
+						}
+					},
+					error: function(xhr) {
+						// Parse error from response if possible
+						try {
+							var errorResponse = JSON.parse(xhr.responseText);
+							var errorMessage = errorResponse.message || 'Ürün sepete eklenirken bir hata oluştu.';
+							
+							// Hata detaylarını ekle
+							if (errorResponse.detail) {
+								errorMessage += '<hr><div class="text-start"><strong>Detay:</strong><br>' + errorResponse.detail + '</div>';
+							}
+							
+							// Stack trace'i konsola yazdır
+							if (errorResponse.stackTrace) {
+								console.error('Hata stack trace:', errorResponse.stackTrace);
+							}
+							
+							// Hata bilgisini göster
+							showErrorNotification(errorMessage);
+							
+							// Konsola detaylı hata bilgisi
+							console.error('Sepet hatası:', errorResponse);
+						} catch (e) {
+							showErrorNotification(xhr.responseText || 'Ürün sepete eklenirken bir hata oluştu.');
+							console.error('Sepet hatası (parse edilemedi):', xhr.responseText);
+						}
+					},
+					complete: function() {
+						// İşlem tamamlandığında butonu eski haline getir
+						$btn.prop('disabled', false).html(originalHtml);
+					}
+				});
+			});
+		});
+		
+		// Cart count güncelleştirme fonksiyonu
+		function updateCartItemCount(count) {
+			var cartBadge = $('.cart-count-badge');
+			if (cartBadge.length) {
+				cartBadge.text(count);
+				
+				// Eğer sayı 0 ise badge'ı gizle, değilse göster
+				if (count <= 0) {
+					cartBadge.hide();
+				} else {
+					cartBadge.show();
+				}
+			} else {
+				// If badge doesn't exist yet, create it
+				var cartIcon = $('.cart-icon');
+				if (cartIcon.length) {
+					cartIcon.append('<span class="cart-count-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">' + count + '</span>');
+				}
+			}
+		}
+	</script>
+}

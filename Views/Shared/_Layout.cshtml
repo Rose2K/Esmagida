@@ -1,0 +1,506 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Esma Gıda</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    
+    <!-- Main Style CSS - Ürün sayfaları için gerekli -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    @await RenderSectionAsync("Styles", required: false)
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #4b5563;
+            --bg-light: #f8f9fa;
+            --header-height: 80px;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            padding-top: var(--header-height);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Styles */
+        .site-header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            height: var(--header-height);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 1rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            
+        }
+        
+        .logo {
+            height: 70px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Navigation Styles */
+        .main-nav {
+            margin-left: auto;
+            margin-right: 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 10px;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .mobile-nav {
+            display: none;
+            background-color: white;
+            position: absolute;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1020;
+        }
+        
+        .mobile-nav.show {
+            display: block;
+        }
+        
+        .mobile-nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .mobile-nav-item {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .mobile-nav-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 15px 20px;
+            display: block;
+        }
+        
+        .mobile-nav-link:hover {
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .admin-button {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-button:hover {
+            background-color: #0b5ed7;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-button {
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-button:hover {
+            transform: scale(1.08);
+        }
+        
+        .profile-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Cart Icon Styles */
+        .cart-link {
+            display: flex;
+            align-items: center;
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .cart-link:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .cart-icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+        
+        .cart-count-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 6px;
+            min-width: 18px;
+            height: 18px;
+            transform: translate(-50%, -30%) !important;
+        }
+        
+        /* Main Content */
+        main {
+            flex: 1 0 auto;
+            padding: 20px 0;
+        }
+        
+        /* Responsive Adjustments */
+        @@media (max-width: 768px) {
+            .admin-button {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            .profile-img {
+                width: 38px;
+                height: 38px;
+            }
+            
+            .logo {
+                height: 50px;
+            }
+        }
+        
+        @@media (max-width: 576px) {
+            .header-actions {
+                gap: 10px;
+            }
+            
+            .admin-button {
+                padding: 5px 10px;
+                font-size: 13px;
+            }
+            
+            .profile-img {
+                width: 34px;
+                height: 34px;
+            }
+            
+            .logo {
+                height: 42px;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo-container">
+                <a href="@Url.Action("indexx", "Home")">
+                    <img src="~/images/esmagida-high-resolution-logo.png" alt="Esma Gıda" class="logo">
+                </a>
+            </div>
+            
+            <nav class="main-nav d-none d-md-flex">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="@Url.Action("indexx", "Home")" class="nav-link">Ana Sayfa</a></li>
+                    <li class="nav-item"><a href="@Url.Action("shop", "Home")" class="nav-link">Ürünler</a></li>
+                    <li class="nav-item"><a href="@Url.Action("sertifikalar", "Home")" class="nav-link">Sertifikalar</a></li>
+                    <li class="nav-item"><a href="@Url.Action("contact", "Home")" class="nav-link">İletişim</a></li>
+                </ul>   
+            </nav>
+            
+            <div class="header-actions">
+                <a href="@Url.Action("Index", "Cart")" class="cart-link me-3">
+                    <div class="cart-icon position-relative">
+                        <i class="bi bi-cart3 fs-4"></i>
+                        @if (ViewBag.CartItemCount != null && ViewBag.CartItemCount > 0)
+                        {
+                            <span class="cart-count-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @ViewBag.CartItemCount
+                            </span>
+                        }
+                    </div>
+                </a>
+                
+                <a href="@Url.Action("Index", "Admin")" class="admin-button">
+                    <i class="bi bi-gear-fill me-1"></i>Yönetici
+                </a>
+                
+                <div class="dropdown">
+                    <button class="profile-button dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="Profil" class="profile-img">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li><span class="dropdown-item-text">Merhaba, @User.Identity.Name!</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Logout", "Home")">Çıkış Yap</a></li>
+                        }
+                        else
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("login", "Home")">Giriş Yap</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Register", "Home")">Kayıt Ol</a></li>
+                        }
+                    </ul>
+                </div>
+                
+                <!-- Mobile menu toggle -->
+                <button class="mobile-menu-toggle d-md-none ms-2">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav d-md-none">
+            <ul class="mobile-nav-menu">
+                <li class="mobile-nav-item"><a href="@Url.Action("indexx", "Home")" class="mobile-nav-link">Ana Sayfa</a></li>
+                <li class="mobile-nav-item"><a href="@Url.Action("shop", "Home")" class="mobile-nav-link">Ürünler</a></li>
+                <li class="mobile-nav-item"><a href="@Url.Action("Sertifikalar", "Home")" class="mobile-nav-link">Sertifikalar</a></li>
+                <li class="mobile-nav-item"><a href="@Url.Action("Iletisim", "Home")" class="mobile-nav-link">İletişim</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main role="main">
+        <div class="container">
+            <partial name="_Notifications" />
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">Esma Gıda &copy; @DateTime.Now.Year</span>
+        </div>
+    </footer>
+
+    <!-- Error notification container -->
+    <div id="errorNotificationContainer" style="display:none" class="position-fixed top-50 start-50 translate-middle z-3">
+        <div class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 350px; max-width: 90vw;">
+            <div class="d-flex">
+                <div class="toast-body py-3">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span id="errorMessage" class="fs-6"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success notification container -->
+    <div id="successNotificationContainer" style="display:none" class="position-fixed top-50 start-50 translate-middle z-3">
+        <div class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px; max-width: 90vw;">
+            <div class="d-flex">
+                <div class="toast-body py-3">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span id="successMessage" class="fs-6"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    
+    <!-- Isotope - Ürün filtreleme için -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            
+            if (mobileMenuToggle && mobileNav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mobileNav.classList.toggle('show');
+                    
+                    // Change icon based on menu state
+                    const icon = mobileMenuToggle.querySelector('i');
+                    if (mobileNav.classList.contains('show')) {
+                        icon.classList.remove('bi-list');
+                        icon.classList.add('bi-x-lg');
+                    } else {
+                        icon.classList.remove('bi-x-lg');
+                        icon.classList.add('bi-list');
+                    }
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!mobileNav.contains(event.target) && !mobileMenuToggle.contains(event.target) && mobileNav.classList.contains('show')) {
+                        mobileNav.classList.remove('show');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('bi-x-lg');
+                        icon.classList.add('bi-list');
+                    }
+                });
+            }
+            
+            // Add active class to current page link
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath || currentPath.includes(href) && href !== '/') {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Global function to show error notifications
+        function showErrorNotification(message) {
+            // HTML içeriğini desteklemek için text yerine html kullan
+            $('#errorMessage').html(message);
+            
+            // Önce container'ı göster
+            $('#errorNotificationContainer').fadeIn(300);
+            
+            // Sonra toast'u göster
+            var toast = new bootstrap.Toast(document.querySelector('#errorNotificationContainer .toast'), {
+                animation: true,
+                delay: 10000 // 10 saniye göster (detaylı hatalar için daha uzun süre)
+            });
+            toast.show();
+            
+            // Toast kapatıldığında container'ı gizle
+            $('#errorNotificationContainer .toast').on('hidden.bs.toast', function () {
+                $('#errorNotificationContainer').fadeOut(300);
+            });
+            
+            // Manuel olarak kapatma düğmesine tıklandığında
+            $('#errorNotificationContainer .btn-close').click(function() {
+                toast.hide();
+                $('#errorNotificationContainer').fadeOut(300);
+            });
+        }
+        
+        // Global function to show success notifications
+        function showSuccessNotification(message) {
+            $('#successMessage').text(message);
+            
+            // Önce container'ı göster
+            $('#successNotificationContainer').fadeIn(300);
+            
+            // Sonra toast'u göster
+            var toast = new bootstrap.Toast(document.querySelector('#successNotificationContainer .toast'), {
+                animation: true,
+                delay: 5000 // 5 saniye göster
+            });
+            toast.show();
+            
+            // Toast kapatıldığında container'ı gizle
+            $('#successNotificationContainer .toast').on('hidden.bs.toast', function () {
+                $('#successNotificationContainer').fadeOut(300);
+            });
+            
+            // Manuel olarak kapatma düğmesine tıklandığında
+            $('#successNotificationContainer .btn-close').click(function() {
+                toast.hide();
+                $('#successNotificationContainer').fadeOut(300);
+            });
+        }
+    </script>
+</body>
+</html>

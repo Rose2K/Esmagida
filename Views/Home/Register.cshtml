@@ -1,0 +1,81 @@
+﻿@{
+	Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="author" content="SemiColonWeb">
+    <meta name="description"
+          content="Get Canvas to build powerful websites easily with the Highly Customizable &amp; Best Selling Bootstrap Template, today.">
+
+    <!-- Font Imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&display=swap"
+          rel="stylesheet">
+
+    <!-- Core Style -->
+    <!-- Font Icons -->
+    <link rel="stylesheet" href="css/font-icons.css">
+
+    <link rel="stylesheet" href="~/css/register.css">
+
+    <link rel="stylesheet" type="text/css" href="~/css/util.css">
+	<link rel="stylesheet" type="text/css" href="~/css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+    <body>
+        <div class="login-container">
+            <div class="login-box">
+                <img src="~/images/esmagida-high-resolution-logo.png" alt="Esma Gıda Logosu" class="logo">
+                <h3>Kayıt Ol</h3>
+
+                  @if (ViewBag.Error != null)   // Eğer bir hata varsa
+        {
+            <div class="alert alert-danger" style="padding: 15px; margin-bottom: 20px; border: 1px solid red; border-radius: 5px; background-color: #f8d7da; color: #721c24;">
+                @ViewBag.Error  
+            </div>  // Hata mesajını yazdır
+        }
+
+                <form method="post" action="/Home/Register">
+                <input class="input100" type="text" name="firstName" placeholder="Adın" required>
+                <input class="input100" type="text" name="lastName" placeholder="Soy Adın" required>
+                <input class="input100" type="email" name="email" placeholder="Email Adresin" required>
+                <input class="input100" type="password" name="password" id="password" placeholder="Şifre" required>
+                <input class="input100" type="password" name="confirmPassword" id="confirmPassword" placeholder="Şifreyi Onayla" required>
+
+                <button type="submit" class="login100-form-btn" class="submit">Kayıt Ol</button>
+            </form>
+                <p>Zaten bir hesabınız var mı? <a href="~/Home/login">Giriş Yap</a></p>
+            </div>
+        </div>
+          <script>
+            @if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+        document.querySelector("form").addEventListener("submit", function (event) {
+            var password = document.getElementById("password").value;   
+            var confirmPassword = document.getElementById("confirmPassword").value; // Şifre ve şifre onayı alanlarını al
+            if (password !== confirmPassword) {     // Şifreler eşleşmiyorsa
+                alert("Şifreler Eşleşmiyor,Tekrar Deneyin!");   // Kullanıcıya uyarı ver
+                event.preventDefault(); // Formun sunucuya gitmesini engeller
+            }
+        });
+
+        
+    </script>
+    </body>
+
+</html>

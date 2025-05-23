@@ -1,0 +1,400 @@
+@model EsmaGida.Controllers.CartViewModel
+@{
+    ViewData["Title"] = "Sepetim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .cart-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .cart-title {
+        color: #343a40;
+        font-weight: 700;
+        border-bottom: 3px solid #0d6efd;
+        display: inline-block;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .table-container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    .cart-table th {
+        background-color: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+    }
+    
+    .product-thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    
+    .product-name {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+    
+    .cart-action-btn {
+        background-color: transparent;
+        border: none;
+        color: #6c757d;
+        transition: color 0.3s;
+    }
+    
+    .cart-action-btn:hover {
+        color: #dc3545;
+    }
+    
+    .quantity-input {
+        width: 60px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    
+    .cart-summary {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        padding: 20px;
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .continue-shopping {
+        color: #0d6efd;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .continue-shopping:hover {
+        text-decoration: underline;
+    }
+    
+    .checkout-btn {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+        font-weight: 600;
+        border-radius: 30px;
+        padding: 10px 25px;
+        transition: all 0.3s ease;
+    }
+    
+    .checkout-btn:hover {
+        background-color: #157347;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .empty-cart {
+        text-align: center;
+        padding: 40px 0;
+    }
+    
+    .empty-cart-icon {
+        font-size: 5rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+</style>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mt-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("indexx", "Home")">Ana Sayfa</a></li>
+        <li class="breadcrumb-item active">Sepetim</li>
+    </ol>
+</nav>
+
+<div class="cart-container">
+    @Html.AntiForgeryToken()
+    <h1 class="cart-title">Alışveriş Sepetim</h1>
+    
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="table-container mb-4">
+                    <table class="table cart-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Ürün</th>
+                                <th>İsim</th>
+                                <th class="text-center">Fiyat</th>
+                                <th class="text-center">Miktar</th>
+                                <th class="text-center">Toplam</th>
+                                <th class="text-center">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                var product = Model.Products != null && Model.Products.ContainsKey(item.product_id) 
+                                    ? Model.Products[item.product_id] 
+                                    : null;
+                                
+                                <tr data-item-id="@item.id">
+                                    <td class="text-center">
+                                        @if (product != null && !string.IsNullOrEmpty(product.image_url))
+                                        {
+                                            <img src="@product.image_url" class="product-thumbnail" alt="@product.name">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/shop/brand.jpg" class="product-thumbnail" alt="Ürün Görseli">
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (product != null)
+                                        {
+                                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.product_id })" class="product-name">
+                                                @product.name
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="product-name">Ürün bulunamadı</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">@item.price_at_addition.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                                    <td class="text-center">
+                                        <input type="number" class="quantity-input" 
+                                               data-item-id="@item.id" 
+                                               min="1" 
+                                               max="@(product?.stock_quantity ?? 99)" 
+                                               value="@item.quantity">
+                                    </td>
+                                    <td class="text-center">
+                                        @((item.price_at_addition * item.quantity).ToString("C", new System.Globalization.CultureInfo("tr-TR")))
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="cart-action-btn remove-item-btn" data-item-id="@item.id">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="@Url.Action("shop", "Home")" class="continue-shopping">
+                        <i class="bi bi-arrow-left me-2"></i>Alışverişe Devam Et
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h3 class="mb-4">Sipariş Özeti</h3>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Ara Toplam:</span>
+                        <span>@Model.TotalPrice.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Kargo:</span>
+                        <span>Ücretsiz</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Toplam:</span>
+                        <span class="fw-bold">@Model.TotalPrice.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</span>
+                    </div>
+                    
+                    <form asp-action="Checkout" asp-controller="Cart" method="post">
+                        <button type="submit" class="btn checkout-btn w-100">
+                            <i class="bi bi-credit-card me-2"></i>Siparişi Tamamla (Test)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <div class="empty-cart-icon">
+                <i class="bi bi-cart-x"></i>
+            </div>
+            <h3>Sepetiniz Boş</h3>
+            <p class="mb-4">Henüz sepetinize ürün eklemediniz.</p>
+            <a href="@Url.Action("shop", "Home")" class="btn btn-primary">
+                <i class="bi bi-shop me-2"></i>Alışverişe Başla
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // CSRF token'ı tüm AJAX isteklerine ekle
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken", token);
+                }
+            });
+            
+            // Quantity input change handler
+            $('.quantity-input').change(function() {
+                var $input = $(this);
+                var itemId = $input.data('item-id');
+                var quantity = parseInt($input.val());
+                
+                if (quantity <= 0) {
+                    showErrorNotification('Lütfen geçerli bir miktar girin.');
+                    $input.val(1);
+                    return;
+                }
+                
+                // Miktar güncelleme sırasında input'u devre dışı bırak
+                $input.prop('disabled', true);
+                
+                // Satırı vurgulama
+                var $row = $input.closest('tr');
+                $row.addClass('bg-light');
+                
+                // Update quantity via AJAX
+                $.ajax({
+                    url: '@Url.Action("UpdateQuantity", "Cart")',
+                    type: 'POST',
+                    data: {
+                        cartItemId: itemId,
+                        quantity: quantity
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showSuccessNotification('Miktar güncellendi!');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000); // 1 saniye bekleyip sayfayı yenile
+                        } else if (response.message) {
+                            // Hata mesajını göster
+                            var errorMessage = response.message;
+                            
+                            // İç hata mesajını ekle
+                            if (response.detail) {
+                                errorMessage += '<hr><div class="text-start"><strong>Detay:</strong><br>' + response.detail + '</div>';
+                            }
+                            
+                            // Hatanın stack trace bilgisini ekle
+                            if (response.stackTrace) {
+                                console.error('Hata stack trace:', response.stackTrace);
+                            }
+                            
+                            // Tüm hata nesnesini konsola yazdır (inceleme için)
+                            console.error('Miktar güncelleme hatası:', response);
+                            
+                            showErrorNotification(errorMessage);
+                            $input.prop('disabled', false);
+                            $row.removeClass('bg-light');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Parse error from response if possible
+                        try {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            showErrorNotification(errorResponse.message || 'Miktar güncellenirken bir hata oluştu.');
+                        } catch (e) {
+                            showErrorNotification(xhr.responseText || 'Miktar güncellenirken bir hata oluştu.');
+                        }
+                        $input.prop('disabled', false);
+                        $row.removeClass('bg-light');
+                    }
+                });
+            });
+            
+            // Sepetten ürün çıkarma işlemi için form gönderimi
+            $('.remove-item-btn').click(function(e) {
+                e.preventDefault();
+                
+                var $btn = $(this);
+                var $row = $btn.closest('tr');
+                
+                // Butonu devre dışı bırak ve satırı vurgula
+                $btn.prop('disabled', true);
+                $row.addClass('bg-light');
+                
+                var itemId = $btn.data('item-id');
+                
+                $.ajax({
+                    url: '@Url.Action("RemoveFromCart", "Cart")',
+                    type: 'POST',
+                    data: {
+                        cartItemId: itemId
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            showSuccessNotification('Ürün sepetten çıkarıldı!');
+                            
+                            // Satırı animasyonla kaldır
+                            $row.fadeOut(300, function() {
+                                $(this).remove();
+                                
+                                // Sepette başka ürün kalmadıysa sayfayı yenile
+                                if ($('.cart-table tbody tr').length === 0) {
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1000); // 1 saniye bekleyip sayfayı yenile
+                                } else {
+                                    // Toplam tutarı güncelle
+                                    updateCartTotals();
+                                }
+                            });
+                        } else if (response.message) {
+                            showErrorNotification(response.message);
+                            $btn.prop('disabled', false);
+                            $row.removeClass('bg-light');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Hata mesajını göster
+                        try {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            showErrorNotification(errorResponse.message || 'Ürün sepetten çıkarılırken bir hata oluştu.');
+                        } catch (e) {
+                            showErrorNotification(xhr.responseText || 'Ürün sepetten çıkarılırken bir hata oluştu.');
+                        }
+                        $btn.prop('disabled', false);
+                        $row.removeClass('bg-light');
+                    }
+                });
+            });
+            
+            // Sepet toplamlarını Ajax ile güncelleme
+            function updateCartTotals() {
+                $.ajax({
+                    url: '@Url.Action("GetCartTotals", "Cart")',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            $('.cart-summary .mb-2:first-child span:last-child').text(response.subtotal);
+                            $('.cart-summary .mb-4 span:last-child').text(response.total);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+} 

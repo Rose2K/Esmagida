@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Override any conflicting styles */
+.page-title {
+  margin-top: 20px;
+}
+
+/* Ensure breadcrumbs display properly */
+.breadcrumb {
+  background-color: transparent;
+  padding: 0.5rem 0;
+}
+
+/* Ensure consistent spacing */
+#content {
+  padding-top: 20px;
+}

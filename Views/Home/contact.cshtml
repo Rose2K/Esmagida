@@ -1,0 +1,356 @@
+<html dir="ltr" lang="en-US">
+
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="x-ua-compatible" content="IE=edge">
+	<meta name="author" content="SemiColonWeb">
+	<meta name="description"
+		content="Get Canvas to build powerful websites easily with the Highly Customizable &amp; Best Selling Bootstrap Template, today.">
+
+	<!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&display=swap"
+		rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="style.css">
+
+	<!-- map Style -->
+	<link rel="stylesheet" href="~/css/contact.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="css/font-icons.css">
+
+	<!-- Plugins/Components CSS -->
+	<link rel="stylesheet" href="css/swiper.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="map.css">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Document Title
+	============================================= -->
+	<title>İletişim</title>
+
+</head>
+
+<body class="stretched">
+
+	<!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper">
+
+		<!-- Content
+		============================================= -->
+		<section id="content">
+			<div class="content-wrap bg-gray-100 pb-0">
+				<div class="container">
+
+					<div class="row gx-5 col-mb-80">
+						<!-- Postcontent
+						============================================= -->
+
+						<div class="map-container  mb-xl-5">
+							<!--  Türkiye haritası -->
+
+							<img src="~/images/map.png" class="map-container">
+
+						</div>
+						<main class="postcontent col-lg-9">
+							<div class="form-widget">
+
+								<div class="form-result"></div>
+
+								<div class="container mt-5">
+									<!-- Popup için HTML -->
+									<div id="successPopup" class="popup-overlay" style="display: none;">
+										<div class="popup-content">
+											<div class="popup-header success">
+												<i class="fa-solid fa-circle-check"></i>
+												<h3>Başarılı!</h3>
+											</div>
+											<div class="popup-body">
+												<p>Mesajınız başarıyla gönderildi.</p>
+											</div>
+											<div class="popup-footer">
+												<button class="button button-3d" onclick="closePopup()">Tamam</button>
+											</div>
+										</div>
+									</div>
+
+									<div id="errorPopup" class="popup-overlay" style="display: none;">
+										<div class="popup-content">
+											<div class="popup-header error">
+												<i class="fa-solid fa-circle-xmark"></i>
+												<h3>Hata!</h3>
+											</div>
+											<div class="popup-body">
+												<p id="errorMessage">Mesaj gönderilirken bir hata oluştu.</p>
+											</div>
+											<div class="popup-footer">
+												<button class="button button-3d" onclick="closePopup()">Tamam</button>
+											</div>
+										</div>
+									</div>
+
+									<form class="mb-0" id="template-contactform" name="template-contactform" action="/Contact/SendContactForm" method="post">
+										<div class="form-process">
+											<div class="css3-spinner">
+												<div class="css3-spinner-scaler"></div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-4 form-group">
+												<label for="template-contactform-name">Ad Soyad <small>*</small></label>
+												<input type="text" id="template-contactform-name" name="template_contactform_name" value="" class="form-control required">
+											</div>
+
+											<div class="col-md-4 form-group">
+												<label for="template-contactform-email">Email <small>*</small></label>
+												<input type="email" id="template-contactform-email" name="template_contactform_email" value="" class="required email form-control">
+											</div>
+
+											<div class="col-md-4 form-group">
+												<label for="template-contactform-phone">Telefon</label>
+												<input type="text" id="template-contactform-phone" name="template_contactform_phone" value="" class="form-control">
+											</div>
+
+											<div class="w-100"></div>
+
+											<div class="col-md-4 form-group">
+												<label for="template-contactform-subject">Konu <small>*</small></label>
+												<input type="text" id="template-contactform-subject" name="subject" value="" class="required form-control">
+											</div>
+
+											<div class="w-100"></div>
+
+											<div class="col-12 form-group">
+												<label for="template-contactform-message">Mesaj <small>*</small></label>
+												<textarea class="required form-control" id="template-contactform-message" name="template_contactform_message" rows="6" cols="30"></textarea>
+											</div>
+
+											<div class="col-12 form-group d-none">
+												<input type="text" id="template-contactform-botcheck" name="template-contactform-botcheck" value="" class="form-control">
+											</div>
+
+											<div class="col-12 form-group">
+												<button class="button button-3d m-0" type="submit" id="template-contactform-submit" name="template-contactform-submit" value="submit">Gönder</button>
+											</div>
+										</div>
+									</form>
+
+									<h2 class="text-center">Bize Ulaşın</h2>
+								</div>
+
+							</div>
+
+						</main><!-- .postcontent end -->
+
+						<!-- Sidebar
+						============================================= -->
+						<aside class="sidebar col-lg-3">
+
+							<address>
+								<strong>Merkez:</strong><br>
+								İnönü Mah. Gebze Plastikçiler Organize Sanayi Bölgesi Cumhuriyet Cad. No:27<br>
+								(41400),Pendik/İstanbul<br>
+							</address>
+							<abbr title="Phone Number"><strong>Telefon:</strong></abbr> 444 0 921<br>
+							<abbr title="Fax"><strong>Fax:</strong></abbr> +90 262 751 46 42<br>
+							<abbr title="Email Address"><strong>E-mail:</strong></abbr> onka@onka.com.tr
+
+							<div class="widget border-0 pt-0">
+								<div class="fslider customjs testimonial twitter-scroll twitter-feed border border-default p-4 rounded"
+									data-username="envato" data-count="3" data-animation="slide" data-arrows="false">
+									<div class="row gx-2">
+										<div class="col-auto">
+											<i class="i-plain color fa-brands fa-twitter"
+												style="--cnvs-i-size:2rem"></i>
+										</div>
+										<div class="col">
+											<div class="flexslider">
+												<div class="slider-wrap"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="widget border-0 pt-0 ">
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-facebook  mb-xl-5">
+									<i class="fa-brands fa-facebook-f"></i>
+									<i class="fa-brands fa-facebook-f"></i>
+								</a>
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-twitter">
+									<i class="fa-brands fa-twitter"></i>
+									<i class="fa-brands fa-twitter"></i>
+								</a>
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-dribbble">
+									<i class="fa-brands fa-dribbble"></i>
+									<i class="fa-brands fa-dribbble"></i>
+								</a>
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-forrst">
+									<i class="fa-solid fa-tree"></i>
+									<i class="fa-solid fa-tree"></i>
+								</a>
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-pinterest">
+									<i class="fa-brands fa-pinterest-p"></i>
+									<i class="fa-brands fa-pinterest-p"></i>
+								</a>
+
+								<a href="#" class="social-icon si-small bg-dark h-bg-google">
+									<i class="fa-brands fa-google"></i>
+									<i class="fa-brands fa-google"></i>
+								</a>
+
+							</div>
+
+						</aside><!-- .sidebar end -->
+					</div>
+
+				</div>
+			</div>
+		</section><!--Content End-->
+		<!-- Footer
+		============================================= -->
+		<!-- #footer end -->
+
+	</div><!-- #wrapper end -->
+
+	<!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="uil uil-angle-up"></div>
+
+	<!-- JavaScripts
+	============================================= -->
+	<script src="js/plugins.min.js"></script>
+	<script src="js/functions.bundle.js"></script>
+
+	<style>
+		.popup-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+		}
+
+		.popup-content {
+			background: white;
+			padding: 20px;
+			border-radius: 8px;
+			width: 90%;
+			max-width: 400px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.popup-header {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.popup-header.success {
+			color: #28a745;
+		}
+
+		.popup-header.error {
+			color: #dc3545;
+		}
+
+		.popup-header i {
+			font-size: 48px;
+			margin-bottom: 10px;
+		}
+
+		.popup-header h3 {
+			margin: 0;
+			font-size: 24px;
+		}
+
+		.popup-body {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.popup-body p {
+			margin: 0;
+			font-size: 16px;
+			color: #666;
+		}
+
+		.popup-footer {
+			text-align: center;
+		}
+
+		.popup-footer .button {
+			min-width: 120px;
+		}
+	</style>
+
+	@section Scripts {
+		<script>
+			function showPopup(type, message) {
+				if (type === 'success') {
+					$('#successPopup').fadeIn(300);
+				} else {
+					$('#errorMessage').text(message);
+					$('#errorPopup').fadeIn(300);
+				}
+			}
+
+			function closePopup() {
+				$('.popup-overlay').fadeOut(300);
+			}
+
+			$(document).ready(function () {
+				$("#template-contactform").submit(function (e) {
+					e.preventDefault();
+					
+					var formData = {
+						template_contactform_name: $("#template-contactform-name").val(),
+						template_contactform_email: $("#template-contactform-email").val(),
+						template_contactform_phone: $("#template-contactform-phone").val(),
+						subject: $("#template-contactform-subject").val(),
+						template_contactform_message: $("#template-contactform-message").val()
+					};
+
+					$.ajax({
+						url: "/Contact/SendContactForm",
+						type: "POST",
+						data: formData,
+						success: function (result) {
+							if (result.success) {
+								$("#template-contactform")[0].reset();
+								showPopup('success');
+							} else {
+								showPopup('error', result.message);
+							}
+						},
+						error: function (error) {
+							showPopup('error', 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+						}
+					});
+				});
+			});
+		</script>
+	}
+
+</body>
+
+</html>

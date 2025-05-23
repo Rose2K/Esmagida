@@ -1,0 +1,196 @@
+﻿@{
+	Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+
+
+	<!--===============================================================================================-->
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+
+	<link rel="stylesheet" href="~css/font-icons.css">
+	<!--===============================================================================================-->
+</head>
+<body>
+
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="~/images/esmagida-high-resolution-logo.png" alt="IMG">
+				</div>
+
+				<form class="login100-form validate-form" action="~/Home/Login" method="post">
+    <span class="login100-form-title">  <!-- Başlık -->
+        Üye Girişi
+    </span>
+
+    <!-- E-posta Girişi -->
+    <div class="wrap-input100 validate-input" data-validate="Geçerli e-posta adresi gerekli: ex@abc.xyz">
+        <input class="input100" type="email" name="email" placeholder="Email" required>
+        <span class="focus-input100"></span>
+        <span class="symbol-input100">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+        </span> 
+    </div>
+
+    <!-- Şifre Girişi -->
+    <div class="wrap-input100 validate-input" data-validate="Şifre Gerekli">
+        <input class="input100" type="password" name="password" placeholder="Şifre" required>
+        <span class="focus-input100"></span>
+        <span class="symbol-input100">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+        </span>
+    </div>
+
+    <!-- Hata Mesajı (Backend'den gelen hata için) -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- Giriş Butonu -->
+    <div class="container-login100-form-btn">
+        <button type="submit" class="login100-form-btn">
+            Giriş
+        </button>
+    </div>
+
+    <!-- Şifreyi Unuttum -->
+    <div class="text-center p-t-12">
+        <span class="txt1">Unuttum</span>
+        <a class="txt2" href="~/ForgotPassword/Index"> Şifre </a>
+    </div>
+
+    <!-- Kayıt Ol -->
+    <div class="text-center p-t-136">
+        <a class="txt2" href="~/Home/Register">
+            Hesabını Oluştur!
+            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+        </a>
+    </div>
+</form>
+
+			</div>
+		</div>
+	</div>
+
+@if (TempData["SuccessMessage"] != null)  
+{
+    <script>
+         window.onload = function () {
+            // Create a modern toast notification
+            const toast = document.createElement("div");
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center;">
+                    <i class="bi bi-check-circle-fill" style="margin-right: 10px; font-size: 24px;"></i>
+                    <div>
+                        <div style="font-weight: 600; font-size: 16px;">Başarılı!</div>
+                        <div style="font-size: 14px;">Kayıt işleminiz tamamlandı.</div>
+                    </div>
+                </div>`;
+            
+            // Style the toast
+            toast.style.position = "fixed";
+            toast.style.top = "30px";
+            toast.style.right = "30px";
+            toast.style.backgroundColor = "#ffffff";
+            toast.style.color = "#333333";
+            toast.style.padding = "15px 20px";
+            toast.style.borderRadius = "8px";
+            toast.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.2)";
+            toast.style.zIndex = "1000";
+            toast.style.minWidth = "300px";
+            toast.style.borderLeft = "4px solid #4CAF50";
+            toast.style.transform = "translateX(400px)";
+            toast.style.transition = "transform 0.5s ease-in-out";
+            
+            // Add to document
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = "translateX(0)";
+            }, 100);
+            
+            // Progress bar
+            const progressBar = document.createElement("div");
+            progressBar.style.position = "absolute";
+            progressBar.style.bottom = "0";
+            progressBar.style.left = "0";
+            progressBar.style.height = "3px";
+            progressBar.style.width = "100%";
+            progressBar.style.backgroundColor = "#4CAF50";
+            progressBar.style.transition = "width 3.5s linear";
+            toast.appendChild(progressBar);
+            
+            // Animate progress bar
+            setTimeout(() => {
+                progressBar.style.width = "0";
+            }, 100);
+            
+            // Add close button
+            const closeBtn = document.createElement("span");
+            closeBtn.innerHTML = "×";
+            closeBtn.style.position = "absolute";
+            closeBtn.style.top = "10px";
+            closeBtn.style.right = "15px";
+            closeBtn.style.fontSize = "20px";
+            closeBtn.style.cursor = "pointer";
+            closeBtn.style.color = "#999";
+            closeBtn.onclick = function() {
+                toast.style.transform = "translateX(400px)";
+                setTimeout(() => toast.remove(), 500);
+            };
+            toast.appendChild(closeBtn);
+            
+            // Remove after delay
+            setTimeout(() => {
+                toast.style.transform = "translateX(400px)";
+                setTimeout(() => toast.remove(), 500);
+            }, 3500);
+        };  
+    </script>   
+}
+
+
+
+
+	<!--===============================================================================================-->
+	<script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="~/vendor/bootstrap/js/popper.js"></script>
+	<script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="~/js/plugins.min.js"></script>
+	<script src="~/js/functions.bundle.js"></script>
+
+	<script src="~/vendor/select2/select2.min.js"></script>
+
+	<script src="~/vendor/tilt/tilt.jquery.min.js"></script>
+	<script>
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+	<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+</body>
+</html>

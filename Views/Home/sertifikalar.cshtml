@@ -1,0 +1,101 @@
+@model Dictionary<string, List<EsmaGida.Models.Certificate>>
+@{
+	ViewData["Title"] = "Sertifikalarımız";
+	Layout = "_Layout";
+}
+
+<section id="content">
+	<div class="content-wrap bg-light">
+		<div class="container">
+
+			<div class="row justify-content-center mb-6">
+				<div class="col-xl-6 col-lg-8 text-center">
+					<h3 class="h1 fw-bold mb-4">Sertifikalarımız</h3>
+				</div>
+			</div>
+
+			<div class="clear"></div>
+
+			@if(Model != null && Model.Count > 0)
+			{
+				@foreach (var category in Model)
+				{
+					<div class="row justify-content-center mb-5">
+						<div class="col-lg-10">
+							<div class="card bg-white p-4 shadow-sm rounded-5">
+								<div class="category-logo">
+									@{
+										// Kategori logosunu bul - kategori içindeki ilk sertifikada logo varsa onu kullan
+										var categoryLogo = category.Value.FirstOrDefault(c => !string.IsNullOrEmpty(c.category_logo_url))?.category_logo_url;
+									}
+									@if (!string.IsNullOrEmpty(categoryLogo))
+									{
+										<img src="@categoryLogo" alt="@category.Key Kategorisi Logosu">
+									}
+									else
+									{
+										<img src="~/myImages/sertifikakategorilogo.png" alt="@category.Key Kategorisi Logosu">
+									}
+								</div>
+								<div class="row g-4 justify-content-center">
+									@foreach (var certificate in category.Value)
+									{
+										<div class="col-md-4">
+											<div class="image-container text-center">
+												<a href="@certificate.image_url" class="image-link">
+													<img class="img-fluid2 mb-2 rounded img-hover"
+														src="@certificate.image_url" alt="@certificate.name">
+												</a>
+												@if (!string.IsNullOrEmpty(certificate.document_url))
+												{
+													<div class="download-container">
+														<a href="@certificate.document_url" class="download-btn" target="_blank"></a>
+													</div>
+												}
+												<h4 class="mb-0 mt-3">@certificate.name</h4>
+												@if (!string.IsNullOrEmpty(certificate.description))
+												{
+													<p class="text-muted mt-2">@certificate.description</p>
+												}
+											</div>
+										</div>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="row justify-content-center mb-5">
+					<div class="col-lg-10">
+						<div class="card bg-white p-4 shadow-sm rounded-5 text-center">
+							<p>Henüz sertifika bulunmamaktadır.</p>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+
+	<!-- Modal Yapısı -->
+	<div id="myModal" class="modal">
+		<span class="close">&times;</span>
+		<img class="modal-content" id="img01">
+		<div id="caption"></div>
+	</div>
+</section>
+
+<!-- Go To Top -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+@section Scripts {
+	<script src="~/js/plugins.min.js"></script>
+	<script src="~/js/functions.bundle.js"></script>
+	<script src="~/assets/js/sertifika.js"></script>
+	
+	<!-- Sertifikalar için CSS -->
+	<link rel="stylesheet" href="~/assets/css/sertifikalar.css">
+	<link rel="stylesheet" href="~/assets/css/sertifika2.css">
+}

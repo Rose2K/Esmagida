@@ -1,0 +1,117 @@
+@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="p-4">
+    @Html.AntiForgeryToken()
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Kullanıcı Yönetimi</h1>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Yeni Kullanıcı Ekle
+        </button>
+    </div>
+    
+    <div class="mb-4 flex justify-between">
+        <div class="relative">
+            <input type="text" id="searchInput" placeholder="Kullanıcı Ara..." class="pl-10 pr-4 py-2 border rounded-md w-64">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        
+        <div class="flex space-x-2">
+            <button class="border p-2 rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button class="border p-2 rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
+                    <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
+                    <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İsim</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Soyisim</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-posta</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody" class="bg-white divide-y divide-gray-200">
+                @await Html.PartialAsync("_UserListPartial", Model)
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-4 flex items-center justify-between">
+        <p class="text-sm text-gray-600">Toplam <span id="userCount">@Model.Count()</span> kullanıcı gösteriliyor</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Arama işlevi
+            let searchTimer;
+            $('#searchInput').on('keyup', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(function() {
+                    const searchTerm = $('#searchInput').val();
+                    $.ajax({
+                        url: '@Url.Action("SearchUsers", "Admin")',
+                        type: 'GET',
+                        data: { searchTerm: searchTerm },
+                        success: function(result) {
+                            $('#userTableBody').html(result);
+                            const userCount = $('#userTableBody tr').length;
+                            $('#userCount').text(userCount);
+                        },
+                        error: function() {
+                            alert('Arama sırasında bir hata oluştu.');
+                        }
+                    });
+                }, 300);
+            });
+        });
+
+        function setRole(userId, role) {
+            if (confirm(`Bu kullanıcıyı ${role} yapmak istediğinizden emin misiniz?`)) {
+                $.ajax({
+                    url: '@Url.Action("SetUserRole", "Admin")',
+                    type: 'POST',
+                    data: { userId: userId, role: role },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            alert('Kullanıcı rolü başarıyla güncellendi!');
+                            location.reload();
+                        } else {
+                            alert('Hata: ' + result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+                    }
+                });
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

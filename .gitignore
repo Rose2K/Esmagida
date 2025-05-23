@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.env
+*.venv
+.venv/
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# .NET MVC Projesi için gitignore
+
+# .NET SDK ve .NET Core
+.vs/
+.vscode/
+.idea/
+
+# Build output
+bin/
+obj/
+
+# Kullanıcı bazlı dosyalar
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.log
+
+# Paket yöneticisi ve bağımlılıklar
+packages/
+# .NET Core'da .vs dizini kullanılmıyor ancak yine de
+# bazı durumlarda aşağıdaki eklemeyi yapabilirsiniz:
+# project.lock.json
+# project.fragment.lock.json
+
+# ASP.NET Temp Files
+App_Data/
+
+# IntelliJ IDEA veya ReSharper tarafından oluşturulan dosyalar
+.reSharper/
+# Rider'ın .idea dizini
+.idea/
+
+# NuGet
+.nuget/
+
+# Visual Studio for Mac
+.vscode/
+
+# Windows işletim sistemi dosyaları
+Thumbs.db
+Desktop.ini
+
+# Kullanıcıya özgü Visual Studio ayar dosyaları
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.fake
