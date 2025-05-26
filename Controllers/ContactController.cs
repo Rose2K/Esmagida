@@ -16,7 +16,7 @@ namespace EsmaGida.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("omerkhve5234@gmail.com", "ocrd axfv dojr cajs "),
+                    Credentials = new NetworkCredential("", " "),
                     EnableSsl = true,
                 };
 
