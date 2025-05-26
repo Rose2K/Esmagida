@@ -16,7 +16,7 @@ namespace EsmaGida.Controllers
         private readonly string _smtpServer = "smtp.gmail.com";
         private readonly int _smtpPort = 587;
         private readonly string _smtpUsername = "omerkhve5234@gmail.com";
-        private readonly string _smtpPassword = "yiws tyim hnnr pkwp";
+        private readonly string _smtpPassword = "passwoed"
 
         public ForgotPasswordController(ApplicationDbContext context)
         {
